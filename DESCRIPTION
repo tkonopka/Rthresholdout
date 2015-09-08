@@ -1,0 +1,10 @@
+Package: Rthresholdout
+Title: Re-usable holdout implementation in R
+Version: 0.0.0.9000
+Authors@R: person("Tomasz", "Konopka", , "tomasz.konopka@ludwig.ox.ac.uk", role = c("aut", "cre"))
+Description: This package provides an implementation of the re-usable holdout approach proposed in a paper by Dwork, Feldman, Hardt, Pitassi, Reingold, Roth (2015)
+Depends: R (>= 3.1.2)
+License: GPL 3.0
+LazyData: true
+Suggests: knitr
+VignetteBuilder: knitr

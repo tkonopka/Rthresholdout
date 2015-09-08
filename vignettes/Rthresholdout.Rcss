@@ -1,0 +1,62 @@
+
+par {
+  bg: #f8f8f8;
+  mfrow: 2 2;
+}
+par.pdf {
+  mai: 0.8 0.8 0.5 0.2;
+}
+
+jpeg {
+  width: 640;
+  height: 480;
+}
+pdf {
+  width: 10;
+  height: 7.5;
+}
+
+
+lines {
+  lwd: 2;
+}
+lines.guides, lines.random {
+  lty: 2;
+  lwd: 1;
+  col: #bbbbbb;
+}
+lines.random {
+  lty: 2;
+  col: #666666;
+}
+
+
+axis {
+  cex: 1;
+  cex.axis: 1;
+  lwd: 1;
+  las: 1;
+  tck: 0.02;
+}
+axis.x {
+  padj: -1.2;
+}
+axis.y {
+  line: -0.6;
+}
+
+
+mtext {
+  cex: 1;
+  line: 0.4;
+}
+mtext.main {
+  font: 2;
+}
+mtext.x {
+  line: 2.0;
+}
+mtext.y {
+  line: 2.5;
+}
+
