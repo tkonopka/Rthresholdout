@@ -78,7 +78,7 @@ Install package Rthresholdout from github
 
 ```{r, results="hide"}
 library("devtools")
-install_local("/scripts/Rthresholdout/")
+install_github("tkonopka/Rthresholdout/")
 library("Rthresholdout")
 library("Rcssplot")
 ```
