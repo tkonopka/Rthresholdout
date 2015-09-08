@@ -12,11 +12,16 @@ jpeg {
   height: 480;
 }
 pdf {
-  width: 10;
-  height: 7.5;
+  width: 12;
+  height: 6;
 }
 
 
+points {
+  cex: 0.9;
+  lwd: 0;
+  pch: 19;
+}
 lines {
   lwd: 2;
 }
@@ -51,7 +56,8 @@ mtext {
   line: 0.4;
 }
 mtext.main {
-  font: 2;
+  font: 1;
+  line: 0.7;
 }
 mtext.x {
   line: 2.0;
@@ -60,3 +66,9 @@ mtext.y {
   line: 2.5;
 }
 
+
+legend {
+  horiz: 1;
+  lwd: 3;
+  bty: n;
+}

@@ -23,8 +23,8 @@ The calculation in this vignette applies the reusable holdout on synthetic data.
 In this section we set up the synthetic dataset. We will work with matrics describing samples and features. 
 
 ```{r}
-numsamples = 1200
-numfeatures = 3000
+numsamples = 1500
+numfeatures = 1500
 numsignals = 20
 ```
 
@@ -205,8 +205,12 @@ source("Rthresholdout-plot.R")
 mystyle = Rcss("Rthresholdout.Rcss")
 RcssSetDefaultStyle(mystyle)
 
-topdf = FALSE
+plotcolors = c("#0000ff","#00ff00","#ff0000")
+plotcolors.bg = c("#ccccff","#ccffcc","#ffcccc")
+
+topdf = TRUE
 if (topdf) {
+  plotcolors.bg = paste0(plotcolors,"28")	
   filename = paste0("Rthresholdout-",
                   numsamples,"-",numfeatures,"-",numsignals,".pdf")
   Rcsspdf(file=filename)
@@ -214,15 +218,17 @@ if (topdf) {
 } else {
   Rcsspar(mfrow=c(2,3))
 }
+
 for (nowmethod in trymethods) {
-  nowmain = paste0(nowmethod, "\n(",
+  nowmain = paste0(nowmethod, "  (",
                   numsamples," samples, ",numfeatures," features)")
-  if (nowmethod=="overfit") {
+  if (nowmethod=="overfit" | nowmethod=="CV2" | nowmethod=="CV3") {
     plotHresults(results[[nowmethod]], types=c("train","test"), 
-        col=c("#0000ff", "#ff0000"), bgcol=c("#ccccff","#ffcccc"),
+        col=plotcolors[c(1,3)], bgcol=plotcolors.bg[c(1,3)],
         main=nowmain)
   } else {		    
-    plotHresults(results[[nowmethod]], main=nowmain)
+    plotHresults(results[[nowmethod]], main=nowmain,
+        col=plotcolors, bgcol=plotcolors.bg)
   }
 }
 if (topdf) {

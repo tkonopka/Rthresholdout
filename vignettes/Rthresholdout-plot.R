@@ -27,6 +27,7 @@ plotHresults = function(ar, types=c("train.1","train.2","test"),
             c(ar[ari, paste0(ilab,".low")], ar[arirev, paste0(ilab,".high")]),
             col=bgcol[i], border=NA)
     Rcsslines(ar[ari,"k"], ar[ari, paste0(ilab,".median")], col=col[i], lwd=2)
+    Rcsspoints(ar[ari,"k"], ar[ari, paste0(ilab,".median")], col=col[i])
   }
 
   Rcsslines(xlim, rep(0.5, 2), Rcssclass="random")
@@ -40,5 +41,13 @@ plotHresults = function(ar, types=c("train.1","train.2","test"),
   Rcssmtext("k", side=1, Rcssclass="x")
   Rcssmtext("Accuracy", side=2, Rcssclass="y")
   Rcssmtext(main, side=3, Rcssclass="main")
+
+  ## draw legend
+  ## (ad-hoc translation from codes to human-readable descriptors)
+  types[types=="train"] = "Historical"
+  types[types=="train.1"] = "Training"
+  types[types=="train.2"] = "Holdout"
+  types[types=="test"] = "Test"
+  Rcsslegend("bottomright", types, col=col)
   
 }
