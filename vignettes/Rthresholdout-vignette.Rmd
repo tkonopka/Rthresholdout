@@ -24,7 +24,7 @@ In this section we set up the synthetic dataset. We will work with matrics descr
 
 ```{r}
 numsamples = 1500
-numfeatures = 1500
+numfeatures = 4500
 numsignals = 20
 ```
 
