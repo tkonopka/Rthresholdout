@@ -1,5 +1,5 @@
 ---
-title: "Rthresholdout vignetter"
+title: "Rthresholdout vignette"
 author: "Tomasz Konopka"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -24,21 +24,23 @@ In this section we set up the synthetic dataset. We will work with matrics descr
 
 ```{r}
 numsamples = 1500
-numfeatures = 4500
+numfeatures = 1500
 numsignals = 20
 ```
 
-When using the reusable holdout, we will have the following settings/penalties:
+For the reusable holdout, we need to define two additional settings/penalties:
 
 ```{r}
 tolerance.factor = 1;
 threshold.factor = 4;
 ```
 
+For this vignette, the threshold.factor will be important - it determines the conditions when an evaluation function will use a holdout and when a background dataset. The other tolerance factor will determine the noise level of the output - in this vignette this will not play a critical role as we will average results over multiple repetitions and the effect of this noise will largely cancel out.
+
 Finally, we will repeat the simulations for a number of replicates and work with a range of models
 
 ```{r}
-reps = 14;
+reps = 100;
 krange = c(1, seq(5, 30, by=5), seq(40, 120, by=20))
 ```
 
@@ -71,6 +73,7 @@ rm(temp)
 restypes = c("train", "train.1","train.2", "test")
 ```
 
+Using such vectors is not particularly elegant, but they will do for this vignette.
 
 ## Simulation
 
@@ -78,19 +81,19 @@ Install package Rthresholdout from github
 
 ```{r, results="hide"}
 library("devtools")
-install_github("tkonopka/Rthresholdout/")
+install_github("tkonopka/Rthresholdout")
 library("Rthresholdout")
 library("Rcssplot")
 ```
 
-Because the simulation requires generating random datasets, it is a good idea to set the seed. However, since we will average over multiple replicates, the aggregate results should not depend on the seed. 
+Because the simulation requires generating random datasets, it is a good idea to set the seed. But since we will average over multiple replicates, the aggregate results should not depend on the seed. 
 
 ```{r}
 set.seed(39302081)
 ```
 
 
-Now run the simulation. This code is somewhat long because it contains handling of various types of model learning and evaluation. Roughly, the code creates a synthetic dataset containing mostly random numbers, but also a few features designed to correlate with a signal vector. The code will apply each model building strategy on this dataset, and record the performance on the training data and on a test dataset. 
+Now let's run the simulation. This code is somewhat long because it contains handling of various types of model learning and evaluation. Roughly, the code creates a synthetic dataset containing mostly random numbers, but also a few features designed to correlate with a signal vector. The code will apply each model building strategy on this dataset, and record the performance on the training data and on a test dataset. 
 
 First we will make an object that will hold performance for each method and for each replicate.
 
@@ -208,7 +211,7 @@ RcssSetDefaultStyle(mystyle)
 plotcolors = c("#0000ff","#00ff00","#ff0000")
 plotcolors.bg = c("#ccccff","#ccffcc","#ffcccc")
 
-topdf = TRUE
+topdf = FALSE
 if (topdf) {
   plotcolors.bg = paste0(plotcolors,"28")	
   filename = paste0("Rthresholdout-",
@@ -218,7 +221,6 @@ if (topdf) {
 } else {
   Rcsspar(mfrow=c(2,3))
 }
-
 for (nowmethod in trymethods) {
   nowmain = paste0(nowmethod, "  (",
                   numsamples," samples, ",numfeatures," features)")
@@ -235,4 +237,6 @@ if (topdf) {
   dev.off()
 }
 ```
+
+That's all. 
 
