@@ -5,7 +5,7 @@
 plotHresults = function(ar, types=c("train.1","train.2","test"),
   k=20,
   col=c("#0000ff","#00ff00","#ff0000"),
-  bgcol=c("#ccccff","#ccffcc","#ffcccc"), main="") {
+  bgcol=c("#ccccff","#ccffcc","#ffcccc"), main="", Rcssclass=c()) {
   
   xlim = c(0, max(ar[,"k"]))
   ylim=c(0.4, 1)
@@ -40,7 +40,10 @@ plotHresults = function(ar, types=c("train.1","train.2","test"),
   
   Rcssmtext("k", side=1, Rcssclass="x")
   Rcssmtext("Accuracy", side=2, Rcssclass="y")
-  Rcssmtext(main, side=3, Rcssclass="main")
+  if (Rcssclass=="nopdf") {
+    main = gsub(".\\(", "\n\\(", main);
+  }
+  Rcssmtext(main, side=3, Rcssclass=c("main", Rcssclass))
 
   ## draw legend
   ## (ad-hoc translation from codes to human-readable descriptors)
@@ -48,6 +51,6 @@ plotHresults = function(ar, types=c("train.1","train.2","test"),
   types[types=="train.1"] = "Training"
   types[types=="train.2"] = "Holdout"
   types[types=="test"] = "Test"
-  Rcsslegend("bottomright", types, col=col)
+  Rcsslegend("bottomright", legend=types, col=col, Rcssclass=Rcssclass)
   
 }

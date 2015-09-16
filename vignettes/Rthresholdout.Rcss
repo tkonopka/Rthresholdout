@@ -17,6 +17,9 @@ pdf {
 }
 
 
+polygon, points, lines {
+  xpd: 1;
+}
 points {
   cex: 0.9;
   lwd: 0;
@@ -60,6 +63,9 @@ mtext.main {
   font: 1;
   line: 0.7;
 }
+mtext.main.nopdf {
+  cex: 0.8;
+}
 mtext.x {
   line: 2.0;
 }
@@ -76,3 +82,9 @@ legend {
   seg.len: 1.2;
   inset: -0.08 0;
 }
+legend.nopdf {
+  horiz: 0;
+  cex: 1.2;
+  inset: 0 0;
+}
+

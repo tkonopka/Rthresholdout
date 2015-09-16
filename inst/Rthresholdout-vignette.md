@@ -1,7 +1,7 @@
 ---
 title: "Rthresholdout vignette"
 author: "Tomasz Konopka"
-date: "2015-09-11"
+date: "2015-09-16"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -37,9 +37,10 @@ tolerance.factor = 1;
 threshold.factor = 4;
 ```
 
-For this vignette, the threshold.factor will be important - it determines the conditions when an evaluation function will use a holdout and when a background dataset. The other tolerance factor will determine the noise level of the output - in this vignette this will not play a critical role as we will average results over multiple repetitions and the effect of this noise will largely cancel out.
+For this vignette, the threshold.factor will be important - it determines the conditions when an evaluation function will use a holdout and when a background dataset. The other tolerance factor will determine the noise level of the output.
 
-Finally, we will repeat the simulations for a number of replicates and work with a range of models
+Finally, we will repeat the simulations for a number of replicates and work with a range of models (100 repeats is thorough, but try a smaller number for quicker results)
+
 
 
 ```r
@@ -57,7 +58,7 @@ The following object will be used within a loop to describe how the training dat
 
 
 ```r
-trymethods = c("overfit", "CV2", "CV3", "holdN", "holdT4")
+trymethods = c("overfit", "split2", "split3", "holdN", "holdT4")
 ```
 
 When working with historical data split into two parts, it will be helpful to have vectors containing the sample ids for each part.
@@ -93,8 +94,9 @@ install_github("tkonopka/Rthresholdout")
 ```
 ## Downloading github repo tkonopka/Rthresholdout@master
 ## Installing Rthresholdout
-## '/software/opt/R/R-3.1.2/lib/R/bin/R' --vanilla CMD INSTALL  \
-##   '/tmp/Rtmp08Iivj/devtoolsbb65a72b168/tkonopka-Rthresholdout-0b89687'  \
+## '/software/opt/R/R-3.1.2/lib/R/bin/R' --no-site-file --no-environ  \
+##   --no-save --no-restore CMD INSTALL  \
+##   '/tmp/RtmpoUaXd8/devtools1b5a70be84c9/tkonopka-Rthresholdout-0a3a736'  \
 ##   --library='/software/opt/R/R-3.1.2/lib/R/library' --install-tests 
 ## 
 ## Reloading installed Rthresholdout
@@ -137,6 +139,10 @@ if (!exists("results.raw")) {
 }
 ```
 
+```
+## creating results.raw object
+```
+
 
 In this part, the matrices are filled in. This part may take some time...
 
@@ -153,12 +159,12 @@ if (!results.raw$done) {
       
       if (method=="overfit") {
         set.cors = getFeatureCorrelations(ds$train, ds$train.signal)        
-      } else if (method=="CV2") {
+      } else if (method=="split2") {
         set.cors = cbind(
           getFeatureCorrelations(ds$train[,S1], ds$train.signal[S1]),
           getFeatureCorrelations(ds$train[,S2], ds$train.signal[S2])
           );					
-      } else if (method=="CV3") {
+      } else if (method=="split3") {
         set.cors = cbind(
           getFeatureCorrelations(ds$train[,Sa], ds$train.signal[Sa]),
           getFeatureCorrelations(ds$train[,Sb], ds$train.signal[Sb]),
@@ -202,9 +208,10 @@ if (!results.raw$done) {
   results.raw$done=TRUE;
   cat("\n")  
 }
+```
 
+```r
 if (!exists("results")) {
-  cat("creating results object\n");
   results = list()
   for (method in trymethods) {
     temp = matrix(0, ncol=1+(length(restypes)*3), nrow=length(krange));
@@ -228,21 +235,13 @@ After all the calculation is complete, we can plot performance of each strategy.
 ```r
 source("Rthresholdout-plot.R")
 mystyle = Rcss("Rthresholdout.Rcss")
-```
-
-```
-## Warning in readLines(fcon): incomplete final line found on
-## 'Rthresholdout.Rcss'
-```
-
-```r
 RcssSetDefaultStyle(mystyle)
 
 plotcolors = c("#0000ff","#00ff00","#ff0000")
 plotcolors.bg = c("#ccccff","#ccffcc","#ffcccc")
 
-topdf = FALSE
-if (topdf) {
+topdf = "nopdf"
+if (topdf=="pdf") {
   plotcolors.bg = paste0(plotcolors,"28")	
   filename = paste0("Rthresholdout-",
                   numsamples,"-",numfeatures,"-",numsignals,".pdf")
@@ -254,16 +253,16 @@ if (topdf) {
 for (nowmethod in trymethods) {
   nowmain = paste0(nowmethod, "  (",
                   numsamples," samples, ",numfeatures," features)")
-  if (nowmethod=="overfit" | nowmethod=="CV2" | nowmethod=="CV3") {
+  if (nowmethod=="overfit" | nowmethod=="split2" | nowmethod=="split3") {
     plotHresults(results[[nowmethod]], types=c("train","test"), 
         col=plotcolors[c(1,3)], bgcol=plotcolors.bg[c(1,3)],
-        main=nowmain)
+        main=nowmain, Rcssclass=topdf)
   } else {		    
     plotHresults(results[[nowmethod]], main=nowmain,
-        col=plotcolors, bgcol=plotcolors.bg)
+        col=plotcolors, bgcol=plotcolors.bg, Rcssclass=topdf)
   }
 }
-if (topdf) {
+if (topdf=="pdf") {
   dev.off()
 }
 ```
